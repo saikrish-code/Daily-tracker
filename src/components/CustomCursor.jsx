@@ -9,10 +9,7 @@ export default function CustomCursor() {
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
 
-  // Spring settings for the lagging trailing effect
-  const springConfig = { damping: 25, stiffness: 250, mass: 0.5 }
-  const cursorXSpring = useSpring(cursorX, springConfig)
-  const cursorYSpring = useSpring(cursorY, springConfig)
+  // Bind directly to coordinate values for normal speed position tracking
 
   useEffect(() => {
     // Check if device supports touch to disable custom cursor
@@ -70,8 +67,8 @@ export default function CustomCursor() {
         position: 'fixed',
         left: 0,
         top: 0,
-        x: cursorXSpring,
-        y: cursorYSpring,
+        x: cursorX,
+        y: cursorY,
         translateX: '-30%',
         translateY: '-30%',
         pointerEvents: 'none',

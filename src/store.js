@@ -12,96 +12,11 @@ export const BADGES = [
   { id: 'journal_5', title: 'Self-Reflective', description: 'Write 5 journal entries', icon: '✍️', category: 'journal' },
 ]
 
-// Generate sample mock data for the last 15 days ending yesterday (August 19, 2026)
+// Generate sample mock data disabled as per user request to start clean
 const generateMockData = () => {
-  const data = {}
-  const moods = ['😊', '🤩', '🎯', '🥱', '🧘', '🔥', '💪']
-  const dsaTitles = [
-    { title: 'Two Sum', diff: 'Easy' },
-    { title: 'Add Two Numbers', diff: 'Medium' },
-    { title: 'Longest Substring Without Repeating Characters', diff: 'Medium' },
-    { title: 'Median of Two Sorted Arrays', diff: 'Hard' },
-    { title: 'Reverse Integer', diff: 'Easy' },
-    { title: 'Container With Most Water', diff: 'Medium' },
-    { title: '3Sum', diff: 'Medium' },
-    { title: 'Merge k Sorted Lists', diff: 'Hard' },
-    { title: 'Valid Parentheses', diff: 'Easy' },
-    { title: 'Merge Two Sorted Lists', diff: 'Easy' },
-    { title: 'Search in Rotated Sorted Array', diff: 'Medium' },
-    { title: 'Valid Sudoku', diff: 'Medium' },
-    { title: 'Group Anagrams', diff: 'Medium' },
-    { title: 'Maximum Subarray', diff: 'Easy' },
-    { title: 'Spiral Matrix', diff: 'Medium' }
-  ]
-  const repos = ['pulsetrack-dashboard', 'leetcode-solutions', 'daily-workout-tracker', 'ai-agent-core', 'rust-web-server']
-  const commitMessages = ['refactor backend store', 'add spring animations to detail card', 'fix custom cursor lagging', 'optimize rendering of Recharts', 'implement heatmap calendar grid']
-  const journalTexts = [
-    'Felt productive today. Finished the graph components and solved a Medium-level recursion problem on LeetCode. Feeling great.',
-    'Workout was tough today but powered through. GitHub commits are looking nice and green.',
-    'Slightly tired, did only one Easy problem. Spent more time reading design guides for dark mode dashboard layout.',
-    'Amazing flow state today. Coded for 5 hours straight, refactoring the state persistence. Slept late but satisfied.',
-    'Rest day today. Focused on journaling and planning the next milestones. Mood is calm and reflective.',
-  ]
-
-  for (let i = 15; i >= 1; i--) {
-    const d = subDays(new Date('2026-08-20'), i)
-    const dateStr = format(d, 'yyyy-MM-dd')
-    
-    const mood = moods[Math.floor(Math.random() * moods.length)]
-    const journalText = journalTexts[Math.floor(Math.random() * journalTexts.length)]
-    
-    const hasDSA = Math.random() > 0.3
-    const dsaCount = hasDSA ? Math.floor(Math.random() * 3) + 1 : 0
-    const dsaProblems = []
-    for (let j = 0; j < dsaCount; j++) {
-      const prob = dsaTitles[Math.floor(Math.random() * dsaTitles.length)]
-      dsaProblems.push({
-        title: prob.title,
-        difficulty: prob.diff,
-        url: `https://leetcode.com/problems/${prob.title.toLowerCase().replace(/ /g, '-')}`,
-        timestamp: `${dateStr}T${10 + j}:30:00Z`
-      })
-    }
-
-    const hasGit = Math.random() > 0.2
-    const commitCount = hasGit ? Math.floor(Math.random() * 4) + 1 : 0
-    const githubCommits = []
-    for (let j = 0; j < commitCount; j++) {
-      githubCommits.push({
-        repo: repos[Math.floor(Math.random() * repos.length)],
-        message: commitMessages[Math.floor(Math.random() * commitMessages.length)],
-        url: 'https://github.com/user/project/commit/abc123ef',
-        timestamp: `${dateStr}T${14 + j}:15:00Z`
-      })
-    }
-
-    const hasWorkout = Math.random() > 0.4
-    const workoutMins = hasWorkout ? Math.floor(Math.random() * 45) + 15 : 0
-    const workoutTarget = 30
-
-    const goals = [
-      { id: '1', type: 'dsa', label: 'Solve DSA problems', target: 2, done: dsaProblems.length },
-      { id: '2', type: 'github', label: 'GitHub commits / PRs', target: 3, done: githubCommits.length },
-      { id: '3', type: 'workout', label: 'Workout minutes', target: workoutTarget, done: workoutMins },
-      { id: '4', type: 'journal', label: 'Write daily journal', target: 1, done: 1 }
-    ]
-
-    data[dateStr] = {
-      goals,
-      dsaProblems,
-      githubCommits,
-      habits: [
-        { name: 'workout', minutes: workoutMins, target: workoutTarget }
-      ],
-      journal: {
-        mood,
-        text: journalText
-      }
-    }
-  }
-
-  return data
+  return {}
 }
+
 
 export const useStore = create(
   persist(
@@ -121,10 +36,13 @@ export const useStore = create(
 
       seedDataIfNeeded: () => {
         const state = get()
-        if (Object.keys(state.dailyData).length === 0) {
-          const seededData = generateMockData()
-          set({ dailyData: seededData })
-          get().checkAndUnlockBadges()
+        const keys = Object.keys(state.dailyData)
+        const todayStr = format(new Date(), 'yyyy-MM-dd')
+        
+        // If there's old seeded mock data, wipe the database clean for fresh start.
+        const hasPastMockData = keys.some(k => k !== todayStr)
+        if (hasPastMockData) {
+          set({ dailyData: {}, unlockedBadges: [], badgeNotifications: [] })
         }
       },
 

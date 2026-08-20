@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Star, Calendar as CalendarIcon, Award, MessageSquareCode, Bell, User } from 'lucide-react'
+import { Menu, X, Star, Calendar as CalendarIcon, Award, MessageSquareCode, Bell, User, Zap } from 'lucide-react'
 import { useStore, BADGES } from './store'
 import Sidebar from './components/Sidebar'
 import RightRail from './components/RightRail'
@@ -172,9 +172,9 @@ export default function App() {
       <div className="md:hidden bg-[#211F2C] border-b border-[#34313F] px-4 py-3 flex items-center justify-between shrink-0 sticky top-0 z-40">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 bg-gradient-to-r from-[#A78BFA] to-[#7C3AED] rounded-lg flex items-center justify-center">
-            <span className="text-white text-sm font-black">P</span>
+            <Zap size={16} className="text-white fill-white" />
           </div>
-          <span className="font-outfit text-base font-extrabold text-[#F5F4F7]">PulseTrack</span>
+          <span className="font-outfit text-base font-extrabold text-[#F5F4F7]">Rise</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

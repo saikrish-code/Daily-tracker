@@ -13,7 +13,7 @@ export default function ActivityCharts() {
   // --- Heatmap Logic ---
   // We render the last 4 weeks. Rows = weeks, Columns = days (Mon -> Sun)
   const getHeatmapData = () => {
-    const today = new Date('2026-08-20')
+    const today = new Date()
     const weeks = []
     
     // Get starting Monday for 4 weeks ago
@@ -73,8 +73,8 @@ export default function ActivityCharts() {
 
     // Filter only past 10 days for cleaner chart view
     const last10Days = eachDayOfInterval({
-      start: subDays(new Date('2026-08-20'), 9),
-      end: new Date('2026-08-20')
+      start: subDays(new Date(), 9),
+      end: new Date()
     })
 
     // Calculate absolute totals for pie breakdown
@@ -113,8 +113,8 @@ export default function ActivityCharts() {
   const getGithubData = () => {
     const data = []
     const last7Days = eachDayOfInterval({
-      start: subDays(new Date('2026-08-20'), 6),
-      end: new Date('2026-08-20')
+      start: subDays(new Date(), 6),
+      end: new Date()
     })
 
     last7Days.forEach(d => {
